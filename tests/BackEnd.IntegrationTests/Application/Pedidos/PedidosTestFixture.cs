@@ -1,18 +1,27 @@
-using Bogus;
-using BackEnd.UnitTests.Common;
-using BackEnd.Domain.Entities;
+﻿using BackEnd.Domain.Entities;
 using BackEnd.Domain.Enum;
+using BackEnd.IntegrationTests.Base;
 
-namespace BackEnd.UnitTests.Domain.Entity.Pedidos;
+namespace BackEnd.IntegrationTests.Application;
+
+[CollectionDefinition(nameof(PedidosTestFixture))]
+public class PedidosRepositoryTestFixtureCollection
+    : ICollectionFixture<PedidosTestFixture>
+{ }
 
 public class PedidosTestFixture : BaseFixture
 {
-    [CollectionDefinition(nameof(PedidosTestFixture))]
-    public class CategoryTestFixtureCollection
-        : ICollectionFixture<PedidosTestFixture>
-    { }
-
-    public PedidosTestFixture() : base() {}
+    public List<Pedido> GetListValidPedidos()
+    {
+        var ObjectList = new List<Pedido>();
+        int numList = new Random().Next(1,100);
+        
+        for (int objeto = 0; objeto < numList; objeto++)
+        {
+            ObjectList.Add(GetValidPedido());
+        }
+        return ObjectList;
+    }
 
     public string GetValidInvalidString(int max)
     {
@@ -30,32 +39,33 @@ public class PedidosTestFixture : BaseFixture
         return ValidId;
     }
 
-    private string? GetValidModel()
+    public string? GetValidModel()
     {
         return Faker.Vehicle.Model();
     }
 
-    private DateTime GetValidDate()
+    public DateTime GetValidDate()
     {
         return Faker.Date.Past();
     }
 
-    private string GetValidStatus()
+    public string GetValidStatus()
     {
-        return Faker.Random.Enum<StatusPedido>().ToString();
+        var status = Faker.Random.Enum<StatusPedido>().ToString();
+        return status.Replace("í","i");
     }
 
-    private decimal GetValidValidDecimal()
+    public decimal GetValidValidDecimal()
     {
         return Faker.Random.Decimal(1,decimal.MaxValue);
     }
 
-    internal decimal GetInvalidDecimal()
+    public decimal GetInvalidDecimal()
     {
         return Faker.Random.Decimal(decimal.MinValue, -1);
     }
 
-    private Guid? GetValidGuid()
+    public Guid? GetValidGuid()
     {
         return Faker.Random.Guid();
     }
@@ -70,5 +80,6 @@ public class PedidosTestFixture : BaseFixture
         ObjectValid.EntregadorId = GetValidGuid();
             
         return ObjectValid;
-    }    
+    }
+
 }

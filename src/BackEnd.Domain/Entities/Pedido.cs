@@ -44,7 +44,7 @@ public class Pedido : Entity
         DomainValidation.When(dataCriacao == default, "Data de Criacao Não pode ser nula");
         DomainValidation.When(valorDaCorrida <= 0, "Valor da Corrida Não Pode ser menor ou igual zero");
         DomainValidation.When(string.IsNullOrWhiteSpace(status) , "Status do pedido Não pode ser Nulo");
-        DomainValidation.When(!(status == StatusPedido.Entregue.ToString() 
+        DomainValidation.When(!(status == StatusPedido.Entregue.ToString() || status == "Disponível"
             || status == StatusPedido.Aceito.ToString() || status == StatusPedido.Disponivel.ToString()) , 
             "Status do pedido Não Permitido"
         );

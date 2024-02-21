@@ -1,18 +1,27 @@
-using Bogus;
-using BackEnd.UnitTests.Common;
-using BackEnd.Domain.Entities;
+﻿using BackEnd.Domain.Entities;
 using BackEnd.Domain.Enum;
+using BackEnd.IntegrationTests.Base;
 
-namespace BackEnd.UnitTests.Domain.Entity.Locacoes;
+namespace BackEnd.IntegrationTests.Application;
+
+[CollectionDefinition(nameof(LocacoesTestFixture))]
+public class LocacoesRepositoryTestFixtureCollection
+    : ICollectionFixture<LocacoesTestFixture>
+{ }
 
 public class LocacoesTestFixture : BaseFixture
 {
-    [CollectionDefinition(nameof(LocacoesTestFixture))]
-    public class CategoryTestFixtureCollection
-        : ICollectionFixture<LocacoesTestFixture>
-    { }
-
-    public LocacoesTestFixture() : base() {}
+    public List<Locacao> GetListValidLocacoes()
+    {
+        var ObjectList = new List<Locacao>();
+        int numList = new Random().Next(1,100);
+        
+        for (int objeto = 0; objeto < numList; objeto++)
+        {
+            ObjectList.Add(GetValidLocacao());
+        }
+        return ObjectList;
+    }
 
     public string GetValidInvalidString(int max)
     {
@@ -30,25 +39,25 @@ public class LocacoesTestFixture : BaseFixture
         return ValidId;
     }
 
-    private DateTime GetValidDateCreated()
+    public DateTime GetValidDateCreated()
     {
         return Faker.Date.Future();
     }
 
-    private int GalidDaysForPlan()
+    public int GalidDaysForPlan()
     {
         var listValues = new List<int>() { 7, 15, 30 };
         return (int)Faker.Random.ListItem(listValues);
     }
 
-    private decimal GetValidValuePlan(string validDaysForPlan)
+    public decimal GetValidValuePlan(string validDaysForPlan)
     {
         var planValueDays = Enum.Parse<Planos>(validDaysForPlan);
 
         return (int)planValueDays;
     }
 
-    private string? GetValidStatus()
+    public string? GetValidStatus()
     {
         return Faker.Random.Enum<StatusLocacao>().ToString();
     }

@@ -1,17 +1,26 @@
-using BackEnd.Domain.Entities;
-using Bogus;
-using BackEnd.UnitTests.Common;
+﻿using BackEnd.Domain.Entities;
+using BackEnd.IntegrationTests.Base;
 
-namespace BackEnd.UnitTests.Domain.Entity.Motos;
+namespace BackEnd.IntegrationTests.Application;
+
+[CollectionDefinition(nameof(MotosTestFixture))]
+public class MotosRepositoryTestFixtureCollection
+    : ICollectionFixture<MotosTestFixture>
+{ }
 
 public class MotosTestFixture : BaseFixture
 {
-    [CollectionDefinition(nameof(MotosTestFixture))]
-    public class CategoryTestFixtureCollection
-        : ICollectionFixture<MotosTestFixture>
-    { }
-
-    public MotosTestFixture() : base() {}
+    public List<Moto> GetListValidMotos()
+    {
+        var ObjectList = new List<Moto>();
+        int numList = new Random().Next(1,100);
+        
+        for (int objeto = 0; objeto < numList; objeto++)
+        {
+            ObjectList.Add(GetValidMoto());
+        }
+        return ObjectList;
+    }
 
     public string GetValidInvalidString(int max)
     {
@@ -24,22 +33,22 @@ public class MotosTestFixture : BaseFixture
         do
         {
             ValidId = Faker.Date.Past(20).Year;
-        }while (ValidId < 0);
+        } while (ValidId < 0);
 
         return ValidId;
     }
 
-    private string? GetValidModel()
+    public string? GetValidModel()
     {
         return Faker.Vehicle.Model();
     }
 
-    private string? GetValidValidNumberPlate()
+    public string? GetValidValidNumberPlate()
     {
         return Faker.Random.Replace("???-#*##");
     }
 
-    private bool GetValidStatus()
+    public bool GetValidStatus()
     {
         return Faker.Random.Bool();
     }
@@ -52,7 +61,7 @@ public class MotosTestFixture : BaseFixture
         ObjectValid.Modelo = GetValidModel();
         ObjectValid.Placa = GetValidValidNumberPlate();
         ObjectValid.Ativo = GetValidStatus();
-            
+
         return ObjectValid;
     }
 }
